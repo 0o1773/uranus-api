@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - v2
+
+name: Build and Deploy
+
+jobs:
+  push_docker_img:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Docker Img
+        run: |
+          docker build --tag ghcr.io/$GITHUB_ACTOR/uranus-api:latest \
+          --tag ghcr.io/$GITHUB_ACTOR/uranus-api:$(echo $GITHUB_SHA | head -c7) \
+          --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
+          --build-arg RIOT_API_KEY=${{ secrets.RIOT_API_KEY }} \
+          .
+      - name: Push Docker Img
+        run: |
+          docker push ghcr.io/$GITHUB_ACTOR/uranus-api:latest
+          docker push ghcr.io/$GITHUB_ACTOR/uranus-api:$(echo $GITHUB_SHA | head -c7)

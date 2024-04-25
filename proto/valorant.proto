@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package uranus.valorant;
+
+message PlayerInfoDto {
+  string id = 1;
+  string name = 2;
+  string tag = 3;
+}
+
+message StatsDto {
+  int32 kill = 1;
+  int32 death = 2;
+  int32 assist = 3;
+  float kd = 4;
+  ShootRateDto shootRate = 5;
+  int32 combatScore = 6;
+  int32 averageCombatScore = 7;
+  float averageDamagePerRound = 8;
+}
+message RecentStatsDto {
+  StatsDto stats = 1;
+  CareerResultsDto careerResults = 2;
+}
+message CareerResultsDto {
+  int32 wins = 1;
+  int32 losses = 2;
+  int32 draw = 3;
+  float winRate = 4;
+}
+message ShootRateDto {
+  float headShot = 1;
+  float bodyShot = 2;
+  float legShot = 3;
+}
+
+message MatchDto {
+  MatchInfoDto matchInfo = 1;
+  repeated MatchPlayerDto players = 2;
+  repeated RoundDto rounds = 3;
+}
+message MatchInfoDto {
+  string queue = 1;
+  int64 startTimestamp = 2;
+  MapDto map = 3;
+  int32 totalRound = 4;
+  int32 winRound = 5;
+  bool isWin = 6;
+}
+message MatchesDto {
+  repeated MatchDto matches = 1;
+}
+
+
+message MatchPlayerDto {
+  AgentDto agent = 1;
+  PlayerInfoDto playerInfo = 2;
+  TierInfoDto tierInfo = 3;
+  StatsDto stats = 4;
+  RecentStatsDto recentStats = 5;
+}
+message RoundDto {
+  int32 roundCount = 1;
+  bool isWin = 2;
+  RoundResultDto roundResultData = 3;
+}
+message RoundResultDto {
+  string ceremony = 1;
+  string image = 2;
+}
+
+message TierInfoDto {
+  int32 tier = 1;
+  string tierName = 2;
+  string divisionName = 3;
+  string icon = 4;
+  string color = 5;
+}
+message AgentDto {
+  string id = 1;
+  string name = 2;
+  string icon = 3;
+  string logImg = 4;
+  string role = 5;
+}
+message MapDto {
+  string id = 1;
+  string name = 2;
+}
+
+
+
+
+message RequestMatches {
+  string playerId = 1;
+  optional int32 max = 2;
+  optional string queue = 3;
+}
+
+message RequestMatch {
+  string playerId = 1;
+  string matchId = 2;
+}
+
+
+service ValorantService {
+  rpc GetMatches(RequestMatches) returns (MatchesDto) {}
+  rpc GetMatch(RequestMatch) returns (MatchDto) {}
+}

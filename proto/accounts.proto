@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package uranus.accounts;
+
+message RiotAccountDto {
+  string id = 1;
+  string name = 2;
+  string tag = 3;
+//  string playerCard = 4;
+//  string playerTitle = 5;
+}
+
+message UserDto {
+  string id = 1;
+  optional string email = 2;
+}
+
+message DiscordDto {
+  string id = 1;
+//  string name = 2;
+}
+
+message AccountDto {
+  UserDto user = 1;
+  optional DiscordDto discord = 2;
+  RiotAccountDto riot = 3;
+}
+
+message RequestFromId {
+  string id = 1;
+}
+
+message RequestFromToken {
+  string token = 1;
+}
+
+service AccountsService {
+  rpc GetAccountFromId(RequestFromId) returns (AccountDto) {}
+  rpc GetAccountFromToken(RequestFromToken) returns (AccountDto) {}
+  rpc GetAccountFromPuuid(RequestFromId) returns (AccountDto) {}
+  rpc GetAccountFromDiscordId(RequestFromId) returns (AccountDto) {}
+  rpc GetPlayerInfoFromPuuid(RequestFromId) returns (RiotAccountDto) {}
+  rpc GetPlayerInfoFromToken(RequestFromToken) returns (RiotAccountDto) {}
+}

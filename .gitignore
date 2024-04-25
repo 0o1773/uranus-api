@@ -1,0 +1,7 @@
+/target/
+/src/entities/
+/Cargo.lock
+/migration/target/
+/migration/Cargo.lock
+/.env
+/.idea/

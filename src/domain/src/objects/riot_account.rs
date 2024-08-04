@@ -1,6 +1,8 @@
 use ulid::Ulid;
 
-struct RiotAccount {
+pub type ID = [u8; 16];
+
+pub struct RiotAccount {
   id: [u8; 16],
   puuid: &'static str,
   game_name: &'static str,
@@ -9,10 +11,10 @@ struct RiotAccount {
 }
 
 impl RiotAccount {
-  fn new_riot_account(puuid: &'static str, game_name: &'static str, tag_line: &'static str, player_card: &'static str) -> &'static RiotAccount {
+  fn new_riot_account(puuid: &'static str, game_name: &'static str, tag_line: &'static str, player_card: &'static str) -> RiotAccount {
     let ulid = Ulid::new();
 
-    &RiotAccount {
+    RiotAccount {
       id: ulid.to_bytes(),
       puuid,
       game_name,
@@ -21,8 +23,8 @@ impl RiotAccount {
     }
   }
 
-  fn new_riot_account_with_id(id: [u8; 16], puuid: &'static str, game_name: &'static str, tag_line: &'static str, player_card: &'static str) -> &'static RiotAccount {
-    &RiotAccount {
+  fn new_riot_account_with_id(id: [u8; 16], puuid: &'static str, game_name: &'static str, tag_line: &'static str, player_card: &'static str) -> RiotAccount {
+    RiotAccount {
       id,
       puuid,
       game_name,
@@ -51,19 +53,19 @@ impl RiotAccount {
     self.id
   }
 
-  fn set_puuid(&mut self, puuid: &str) {
+  fn set_puuid(&mut self, puuid: &'static str) {
     self.puuid = puuid;
   }
 
-  fn set_game_name(&mut self, game_name: &str) {
+  fn set_game_name(&mut self, game_name: &'static str) {
     self.game_name = game_name;
   }
 
-  fn set_tag_line(&mut self, tag_line: &str) {
+  fn set_tag_line(&mut self, tag_line: &'static str) {
     self.tag_line = tag_line;
   }
 
-  fn set_player_card(&mut self, player_card: &str) {
+  fn set_player_card(&mut self, player_card: &'static str) {
     self.player_card = player_card;
   }
 

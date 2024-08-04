@@ -1,4 +1,4 @@
 pub mod account;
-mod riot_account;
-mod discord_account;
-mod error;
+pub mod riot_account;
+pub mod discord_account;
+pub mod error;

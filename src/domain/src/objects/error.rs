@@ -1,5 +1,29 @@
-pub enum AccountRepositoryError {}
+pub enum AccountRepositoryError {
+  InsertError,
+  ParseError,
+  QueryError,
+  AccountNotFound,
+  UpdateError,
+  DeleteError
+}
 
-pub enum RiotAccountRepositoryError {}
+pub enum RiotAccountRepositoryError {
+  InsertError,
+  AccountNotFound,
+  QueryError,
+  ParseError,
+  UpdateError,
+  DeleteError,
+}
 
-pub enum DiscordAccountRepositoryError {}
+pub enum DiscordAccountRepositoryError {
+  InsertError,
+  AccountNotFound,
+  QueryError,
+  ParseError,
+  UpdateError,
+  DeleteError,
+  InvalidToken,
+  FailedToFetchUser,
+  InvalidTokenScope,
+}

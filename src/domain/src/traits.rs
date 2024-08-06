@@ -1,3 +1,3 @@
-mod account;
-mod riot_account;
-mod discord_account;
+pub mod account;
+pub mod riot_account;
+pub mod discord_account;

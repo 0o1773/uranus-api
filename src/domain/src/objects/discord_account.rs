@@ -4,16 +4,18 @@ pub type ID = [u8; 16];
 
 pub struct DiscordAccount {
   id: [u8; 16],
-  discord_id: &'static str,
-  username: &'static str,
-  access_token: &'static str,
-  refresh_token: &'static str,
+  discord_id: String,
+  username: String,
+  access_token: String,
+  refresh_token: String,
   expires_at: i64,
-  avatar_url: &'static str,
+  avatar_url: String,
+  created_at: i64,
+  updated_at: i64,
 }
 
 impl DiscordAccount {
-  fn new_discord_account(discord_id: &'static str, username: &'static str, access_token: &'static str, refresh_token: &'static str, expires_at: i64, avatar: &'static str) -> DiscordAccount {
+  pub fn new(discord_id: String, username: String, access_token: String, refresh_token: String, expires_at: i64, avatar: String, created_at: i64, updated_at: i64) -> DiscordAccount {
     let ulid = Ulid::new();
 
     DiscordAccount {
@@ -24,10 +26,12 @@ impl DiscordAccount {
       refresh_token,
       expires_at,
       avatar_url: avatar,
+      created_at,
+      updated_at,
     }
   }
 
-  fn new_discord_account_with_id(id: [u8; 16], discord_id: &'static str, username: &'static str, access_token: &'static str, refresh_token: &'static str, expires_at: i64, avatar: &'static str) -> DiscordAccount {
+  pub fn new_discord_account_with_id(id: [u8; 16], discord_id: String, username: String, access_token: String, refresh_token: String, expires_at: i64, avatar: String, created_at: i64, updated_at: i64) -> DiscordAccount {
     DiscordAccount {
       id,
       discord_id,
@@ -36,50 +40,60 @@ impl DiscordAccount {
       refresh_token,
       expires_at,
       avatar_url: avatar,
+      created_at,
+      updated_at,
     }
   }
 
-  fn discord_id(&self) -> &str {
+  pub fn discord_id(&self) -> String {
     self.discord_id.clone()
   }
 
-  fn username(&self) -> &str {
+  pub fn username(&self) -> String {
     self.username.clone()
   }
 
-  fn access_token(&self) -> &str {
+  pub fn access_token(&self) -> String {
     self.access_token.clone()
   }
 
-  fn refresh_token(&self) -> &str {
+  pub fn refresh_token(&self) -> String {
     self.refresh_token.clone()
   }
 
-  fn expires_at(&self) -> i64 {
+  pub fn expires_at(&self) -> i64 {
     self.expires_at
   }
 
-  fn avatar(&self) -> &str {
+  pub fn avatar_url(&self) -> String {
     self.avatar_url.clone()
   }
+  
+  pub fn created_at(&self) -> i64 {
+    self.created_at
+  }
+  
+  pub fn updated_at(&self) -> i64 {
+    self.updated_at
+  }
 
-  fn id(&self) -> [u8; 16] {
+  pub fn id(&self) -> [u8; 16] {
     self.id
   }
 
-  fn set_discord_id(&mut self, discord_id: &'static str) {
+  fn set_discord_id(&mut self, discord_id: String) {
     self.discord_id = discord_id;
   }
 
-  fn set_username(&mut self, username: &'static str) {
+  fn set_username(&mut self, username: String) {
     self.username = username;
   }
 
-  fn set_access_token(&mut self, access_token: &'static str) {
+  fn set_access_token(&mut self, access_token: String) {
     self.access_token = access_token;
   }
 
-  fn set_refresh_token(&mut self, refresh_token: &'static str) {
+  fn set_refresh_token(&mut self, refresh_token: String) {
     self.refresh_token = refresh_token;
   }
 
@@ -87,7 +101,7 @@ impl DiscordAccount {
     self.expires_at = expires_at;
   }
 
-  fn set_avatar(&mut self, avatar: &'static str) {
+  fn set_avatar(&mut self, avatar: String) {
     self.avatar_url = avatar;
   }
 

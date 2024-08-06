@@ -1,5 +1,5 @@
 [workspace]
-members = [ "src/application","src/domain", "src/infrastructure", "src/presentation"]
+members = [ "src/application","src/domain", "src/infrastructure", "src/presentation", "migration"]
 
 [package]
 name = "api"

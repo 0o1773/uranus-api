@@ -27,3 +27,15 @@ pub enum DiscordAccountRepositoryError {
   FailedToFetchUser,
   InvalidTokenScope,
 }
+
+pub enum AgentRepositoryError {
+  
+}
+
+pub enum MapRepositoryError {
+  
+}
+
+pub enum MatchResultRepositoryError {
+  
+}

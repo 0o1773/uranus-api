@@ -177,7 +177,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Account {
+pub enum Account {
     Table,
     #[sea_orm(iden = "id")]
     Id,
@@ -188,7 +188,7 @@ enum Account {
 }
 
 #[derive(DeriveIden)]
-enum DiscordAccount {
+pub enum DiscordAccount {
     Table,
     #[sea_orm(iden = "id")]
     Id,

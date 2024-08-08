@@ -1,5 +1,6 @@
 use ulid::Ulid;
 use crate::objects::account::ID as AccountID;
+use crate::objects::agent::ID as AgentID;
 use crate::objects::map::ID as MapID;
 
 pub type ID = [u8; 16];
@@ -9,6 +10,7 @@ pub struct MatchResult {
   match_id: String,
   puuid: String,
   account_id: AccountID,
+  agent_id: AgentID,
   map_id: MapID,
   
   kill: i32,
@@ -24,16 +26,19 @@ pub struct MatchResult {
   played_rounds: i32,
   win_rounds: i32,
   win: bool,
+
+  match_start_time: i64,
 }
 
 impl MatchResult {
-  pub fn new_match_result(match_id: String, puuid: String, account_id: AccountID, map_id: MapID, kill: i32, death: i32, assist: i32, hs_rate: f32, first_blood: i32, first_death: i32, combat_score: i32, damage: i32, played_rounds: i32, win_rounds: i32, win: bool) -> MatchResult {
+  pub fn new_match_result(match_id: String, puuid: String, account_id: AccountID, agent_id: AgentID, map_id: MapID, kill: i32, death: i32, assist: i32, hs_rate: f32, first_blood: i32, first_death: i32, combat_score: i32, damage: i32, played_rounds: i32, win_rounds: i32, win: bool, match_start_time: i64) -> MatchResult {
     let ulid = Ulid::new();
     MatchResult {
       id: ulid.to_bytes(),
       match_id,
       puuid,
       account_id,
+      agent_id,
       map_id,
       kill,
       death,
@@ -46,15 +51,17 @@ impl MatchResult {
       played_rounds,
       win_rounds,
       win,
+      match_start_time,
     }
   }
   
-  pub fn new_match_result_with_id(id: ID, match_id: String, puuid: String, account_id: AccountID, map_id: MapID, kill: i32, death: i32, assist: i32, hs_rate: f32, first_blood: i32, first_death: i32, combat_score: i32, damage: i32, played_rounds: i32, win_rounds: i32, win: bool) -> MatchResult {
+  pub fn new_match_result_with_id(id: ID, match_id: String, puuid: String, account_id: AccountID, agent_id: AgentID, map_id: MapID, kill: i32, death: i32, assist: i32, hs_rate: f32, first_blood: i32, first_death: i32, combat_score: i32, damage: i32, played_rounds: i32, win_rounds: i32, win: bool, match_start_time: i64) -> MatchResult {
     MatchResult {
       id,
       match_id,
       puuid,
       account_id,
+      agent_id,
       map_id,
       kill,
       death,
@@ -67,6 +74,7 @@ impl MatchResult {
       played_rounds,
       win_rounds,
       win,
+      match_start_time,
     }
   }
   
@@ -129,7 +137,15 @@ impl MatchResult {
   pub fn win(&self) -> bool {
     self.win
   }
-  
+
+  pub fn match_start_time(&self) -> i64 {
+    self.match_start_time
+  }
+
+  pub fn agent_id(&self) -> AgentID {
+    self.agent_id.clone()
+  }
+
   pub fn id(&self) -> ID {
     self.id.clone()
   }
@@ -193,7 +209,15 @@ impl MatchResult {
   pub fn set_win(&mut self, win: bool) {
     self.win = win;
   }
-  
+
+  pub fn set_match_start_time(&mut self, match_start_time: i64) {
+    self.match_start_time = match_start_time;
+  }
+
+  pub fn set_agent_id(&mut self, agent_id: AgentID) {
+    self.agent_id = agent_id;
+  }
+
   pub fn set_id(&mut self, id: ID) {
     self.id = id;
   }

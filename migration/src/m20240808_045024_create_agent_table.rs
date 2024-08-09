@@ -20,6 +20,7 @@ impl MigrationTrait for Migration {
                 .col(
                     ColumnDef::new(Agent::AgentID)
                       .string()
+                      .unique_key()
                       .not_null()
                 )
                 .col(

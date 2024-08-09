@@ -1,4 +1,4 @@
-use sea_orm::{ActiveModelTrait, DbBackend, DbConn, EntityTrait, QueryFilter, Set, Statement};
+use sea_orm::{ActiveModelTrait, DbBackend, DbConn, EntityTrait, Set, Statement};
 use domain:: {
   objects::account::{Account, ID},
   objects::error::AccountRepositoryError,
@@ -32,6 +32,12 @@ impl AccountRepository for AccountRepositoryImpl {
     };
 
     let result = account::Entity::insert(pear).exec(&db).await;
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(AccountRepositoryError::DatabaseError)
+    }
+    
     match result {
       Ok(_) => Ok(account),
       Err(_) => Err(AccountRepositoryError::InsertError)
@@ -43,7 +49,12 @@ impl AccountRepository for AccountRepositoryImpl {
     let result = account::Entity::find_by_id(id.to_vec())
       .one(&db)
       .await;
-
+    
+    
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(AccountRepositoryError::DatabaseError)
+    }
 
 
     match result {
@@ -80,6 +91,12 @@ impl AccountRepository for AccountRepositoryImpl {
 
     let result = pear.update(&db).await;
 
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(AccountRepositoryError::DatabaseError)
+    }
+    
     match result {
       Ok(_) => Ok(account),
       Err(_) => Err(AccountRepositoryError::UpdateError)
@@ -92,6 +109,12 @@ impl AccountRepository for AccountRepositoryImpl {
     let res = account::Entity::delete_by_id(id.to_vec())
       .exec(&db)
       .await;
+
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(AccountRepositoryError::DatabaseError)
+    }
 
     match res {
       Ok(_) => Ok(()),
@@ -109,6 +132,12 @@ impl AccountRepository for AccountRepositoryImpl {
       ))
       .one(&db)
       .await;
+
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(AccountRepositoryError::DatabaseError)
+    }
     
     match result {
       Ok(Some(pear)) => {
@@ -144,6 +173,12 @@ impl AccountRepository for AccountRepositoryImpl {
       ))
       .one(&db)
       .await;
+
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(AccountRepositoryError::DatabaseError)
+    }
     
     match result {
       Ok(Some(pear)) => {

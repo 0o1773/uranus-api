@@ -64,6 +64,11 @@ impl DiscordAccountRepository for DiscordAccountRepositoryImpl {
 
     let result = discord_account::Entity::insert(pear).exec(&db).await;
 
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(DiscordAccountRepositoryError::DatabaseError)
+    }
+    
     match result {
       Ok(_) => Ok(account),
       Err(_) => Err(DiscordAccountRepositoryError::InsertError)
@@ -76,6 +81,11 @@ impl DiscordAccountRepository for DiscordAccountRepositoryImpl {
       .one(&db)
       .await;
 
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(DiscordAccountRepositoryError::DatabaseError)
+    }
+    
     match result {
       Ok(Some(pear)) => {
         let account = DiscordAccount::new_discord_account_with_id(
@@ -114,6 +124,12 @@ impl DiscordAccountRepository for DiscordAccountRepositoryImpl {
     };
     
     let result = pear.update(&db).await;
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(DiscordAccountRepositoryError::DatabaseError)
+    }
+    
     match result { 
       Ok(_) => Ok(discord_account),
       Err(_) => Err(DiscordAccountRepositoryError::UpdateError)
@@ -125,6 +141,11 @@ impl DiscordAccountRepository for DiscordAccountRepositoryImpl {
     let result = discord_account::Entity::delete_by_id(id.to_vec())
       .exec(&db)
       .await;
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(DiscordAccountRepositoryError::DatabaseError)
+    }
     
     match result {
       Ok(_) => Ok(()),
@@ -139,6 +160,11 @@ impl DiscordAccountRepository for DiscordAccountRepositoryImpl {
       .filter(discord_account::Column::DiscordId.contains(discord_id))
       .one(&db)
       .await;
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(DiscordAccountRepositoryError::DatabaseError)
+    }
 
     match result {
       Ok(Some(pear)) => {
@@ -165,6 +191,11 @@ impl DiscordAccountRepository for DiscordAccountRepositoryImpl {
       .filter(discord_account::Column::Username.contains(username))
       .one(&db)
       .await;
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(DiscordAccountRepositoryError::DatabaseError)
+    }
     
     match result {
       Ok(Some(pear)) => {

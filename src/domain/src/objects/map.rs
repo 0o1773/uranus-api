@@ -62,3 +62,8 @@ impl Map {
   }
 }
 
+pub fn id_from_vec(vec: Vec<u8>) -> ID {
+  let mut id = [0; 16];
+  id.copy_from_slice(&vec);
+  id
+}

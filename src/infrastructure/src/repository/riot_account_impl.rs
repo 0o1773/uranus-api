@@ -36,7 +36,11 @@ impl RiotAccountRepository for RiotAccountRepositoryImpl {
     };
 
     let result = riot_account::Entity::insert(pear).exec(&db).await;
-
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(RiotAccountRepositoryError::DatabaseError)
+    }
+    
     match result {
       Ok(_) => Ok(account),
       Err(_) => Err(RiotAccountRepositoryError::InsertError)
@@ -49,6 +53,11 @@ impl RiotAccountRepository for RiotAccountRepositoryImpl {
       .one(&db)
       .await;
 
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(RiotAccountRepositoryError::DatabaseError)
+    }
+    
     match result {
       Ok(Some(pear)) => {
         let account = RiotAccount::new_riot_account_with_id(
@@ -73,6 +82,11 @@ impl RiotAccountRepository for RiotAccountRepositoryImpl {
       .filter(riot_account::Column::GameName.contains(game_name))
       .one(&db)
       .await;
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(RiotAccountRepositoryError::DatabaseError)
+    }
 
     match result {
       Ok(Some(pear)) => {
@@ -102,6 +116,11 @@ impl RiotAccountRepository for RiotAccountRepositoryImpl {
       .one(&db)
       .await;
 
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(RiotAccountRepositoryError::DatabaseError)
+    }
+    
     match result {
       Ok(Some(pear)) => {
         let id: ID = match pear.id.try_into() {
@@ -141,6 +160,12 @@ impl RiotAccountRepository for RiotAccountRepositoryImpl {
     };
 
     let result = pear.update(&db).await;
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(RiotAccountRepositoryError::DatabaseError)
+    }
+    
     match result {
       Ok(_) => Ok(riot_account),
       Err(_) => Err(RiotAccountRepositoryError::UpdateError)
@@ -152,6 +177,11 @@ impl RiotAccountRepository for RiotAccountRepositoryImpl {
     let result = riot_account::Entity::delete_by_id(id.to_vec())
       .exec(&db)
       .await;
+
+    match db.close().await {
+      Ok(_) => {},
+      Err(_) => return Err(RiotAccountRepositoryError::DatabaseError)
+    }
 
     match result {
       Ok(_) => Ok(()),

@@ -1,17 +1,17 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct MatchDto {
   #[serde(rename = "matchInfo")]
-  match_info: MatchInfoDto,
-  players: Vec<PlayerDto>,
-  coaches: Vec<CoachDto>,
-  teams: Vec<TeamDto>,
+  pub match_info: MatchInfoDto,
+  pub players: Vec<PlayerDto>,
+  pub coaches: Vec<CoachDto>,
+  pub teams: Vec<TeamDto>,
   #[serde(rename = "roundResults")]
-  rounds: Vec<RoundDto>,
+  pub rounds: Vec<RoundDto>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct MatchInfoDto {
   #[serde(rename = "matchId")]
   pub match_id: String,
@@ -35,194 +35,194 @@ pub struct MatchInfoDto {
   pub season_id: String,
 }
 //
-// #[derive(Serialize, Deserialize)]
+// #[derive(Serialize, Deserialize, Clone)]
 // struct PremierMatchInfoDto {
 // }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct PlayerDto {
-  puuid: String,
+  pub puuid: String,
   #[serde(rename = "gameName")]
-  game_name: String,
+  pub game_name: String,
   #[serde(rename = "tagLine")]
-  tag_line: String,
+  pub tag_line: String,
   #[serde(rename = "teamId")]
-  team_id: String,
+  pub team_id: String,
   #[serde(rename = "partyId")]
-  party_id: String,
+  pub party_id: String,
   #[serde(rename = "characterId")]
-  agent_id: String,
+  pub agent_id: String,
   #[serde(rename = "stats")]
-  stats: PlayerStatsDto,
+  pub stats: PlayerStatsDto,
   #[serde(rename = "competitiveTier")]
-  competitive_tier: i32,
+  pub competitive_tier: i32,
   #[serde(rename = "playerCard")]
-  player_card: String,
+  pub player_card: String,
   #[serde(rename = "playerTitle")]
-  player_title: String,
+  pub player_title: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct PlayerStatsDto {
-  score: i32,
-  kills: i32,
-  deaths: i32,
-  assists: i32,
+  pub score: i32,
+  pub kills: i32,
+  pub deaths: i32,
+  pub assists: i32,
   #[serde(rename = "roundsPlayed")]
-  rounds_played: i32,
+  pub rounds_played: i32,
   #[serde(rename = "playtimeMillis")]
-  playtime: i32,
+  pub playtime: i32,
   #[serde(rename = "abilityCasts")]
-  ability_casts: Option<AbilityCastsDto>,
+  pub ability_casts: Option<AbilityCastsDto>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct AbilityCastsDto {
   #[serde(rename = "grenadeCasts")]
-  grenade_casts: i32,
+  pub grenade_casts: i32,
   #[serde(rename = "ability1Casts")]
-  ability1_casts: i32,
+  pub ability1_casts: i32,
   #[serde(rename = "ability2Casts")]
-  ability2_casts: i32,
+  pub ability2_casts: i32,
   #[serde(rename = "ultimateCasts")]
-  ultimate_casts: i32,
+  pub ultimate_casts: i32,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct CoachDto {
-  puuid: String,
+  pub puuid: String,
   #[serde(rename = "teamId")]
-  team_id: String,
+  pub team_id: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct TeamDto {
   #[serde(rename = "teamId")]
-  team_id: String,
+  pub team_id: String,
   #[serde(rename = "won")]
-  won: bool,
+  pub won: bool,
   #[serde(rename = "roundsPlayed")]
-  rounds_played: i32,
+  pub rounds_played: i32,
   #[serde(rename = "roundsWon")]
-  rounds_won: i32,
+  pub rounds_won: i32,
   #[serde(rename = "numPoints")]
-  num_points: i32,
+  pub num_points: i32,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct RoundDto {
   #[serde(rename = "roundNum")]
-  round_num: i32,
+  pub round_num: i32,
   #[serde(rename = "roundResult")]
-  round_result: String,
+  pub round_result: String,
   #[serde(rename = "roundCeremony")]
-  round_ceremony: String,
+  pub round_ceremony: String,
   #[serde(rename = "winningTeam")]
-  winning_team: String,
+  pub winning_team: String,
   #[serde(rename = "bombPlanter")]
-  bomb_planter: String,
+  pub bomb_planter: String,
   #[serde(rename = "bombDefuser")]
-  bomb_defuser: String,
+  pub bomb_defuser: String,
   #[serde(rename = "plantRoundTime")]
-  plant_round_time: i32,
+  pub plant_round_time: i32,
   #[serde(rename = "plantPlayerLocations")]
-  plant_player_locations: Option<Vec<PlayerLocationsDto>>,
+  pub plant_player_locations: Option<Vec<PlayerLocationsDto>>,
   #[serde(rename = "plantLocation")]
-  plant_location: Option<LocationDto>,
+  pub plant_location: Option<LocationDto>,
   #[serde(rename = "plantSite")]
-  plant_site: Option<String>,
+  pub plant_site: Option<String>,
   #[serde(rename = "defuseRoundTime")]
-  defuse_round_time: Option<i32>,
+  pub defuse_round_time: Option<i32>,
   #[serde(rename = "defusePlayerLocations")]
-  defuse_player_locations: Option<Vec<PlayerLocationsDto>>,
+  pub defuse_player_locations: Option<Vec<PlayerLocationsDto>>,
   #[serde(rename = "defuseLocation")]
-  defuse_location: Option<LocationDto>,
+  pub defuse_location: Option<LocationDto>,
   #[serde(rename = "playerStats")]
-  player_stats: Vec<PlayerRoundStatsDto>,
+  pub player_stats: Vec<PlayerRoundStatsDto>,
   #[serde(rename = "roundResultCode")]
-  round_result_code: String,
+  pub round_result_code: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct PlayerLocationsDto {
-  puuid: String,
+  pub puuid: String,
   #[serde(rename = "viewRadians")]
-  view_radians: f32,
-  location: LocationDto,
+  pub view_radians: f32,
+  pub location: LocationDto,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct LocationDto {
-  x: f32,
-  y: f32,
+  pub x: f32,
+  pub y: f32,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct PlayerRoundStatsDto {
-  puuid: String,
-  kills: Vec<KillDto>,
-  damage: Vec<DamageDto>,
-  score: i32,
-  economy: EconomyDto,
-  ability: AbilityDto,
+ pub puuid: String,
+ pub kills: Vec<KillDto>,
+ pub damage: Vec<DamageDto>,
+ pub score: i32,
+ pub economy: EconomyDto,
+ pub ability: AbilityDto,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct KillDto {
   #[serde(rename = "timeSinceGameStartMillis")]
-  time_since_game_start: i32,
+  pub time_since_game_start: i32,
   #[serde(rename = "timeSinceRoundStartMillis")]
-  time_since_round_start: i32,
-  killer: String,
-  victim: String,
+  pub time_since_round_start: i32,
+  pub killer: String,
+  pub victim: String,
   #[serde(rename = "victimLocation")]
-  victim_location: LocationDto,
+  pub victim_location: LocationDto,
   #[serde(rename = "assistants")]
-  assistants: Vec<String>,
+  pub assistants: Vec<String>,
   #[serde(rename = "playerLocations")]
-  player_locations: Vec<PlayerLocationsDto>,
-  #[serde(rename = "finishingDamage")]  
-  finishing_damage: FinishingDamageDto,
+  pub player_locations: Vec<PlayerLocationsDto>,
+  #[serde(rename = "finishingDamage")]
+  pub finishing_damage: FinishingDamageDto,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct FinishingDamageDto {
   #[serde(rename = "damageType")]
-  damage_type: String,
+  pub damage_type: String,
   #[serde(rename = "isSecondaryFireMode")]
-  is_secondary_fire_mode: bool,
+  pub is_secondary_fire_mode: bool,
   #[serde(rename = "damageItem")]
-  damage_item: String,
+  pub damage_item: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct DamageDto {
-  receiver: String,
+  pub receiver: String,
   #[serde(rename = "damage")]
-  damage: i32,
-  legshots: i32,
-  bodyshots: i32,
-  headshots: i32,
+  pub damage: i32,
+  pub legshots: i32,
+  pub bodyshots: i32,
+  pub headshots: i32,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct EconomyDto {
   #[serde(rename = "loadoutValue")]
-  loadout_value: i32,
-  weapon: String,
-  armor: String,
-  remaining: i32,
-  spent: i32,
+  pub loadout_value: i32,
+  pub weapon: String,
+  pub armor: String,
+  pub remaining: i32,
+  pub spent: i32,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct AbilityDto {
   #[serde(rename = "grenadeEffects")]
-  grenade_effects: String,
+  pub grenade_effects: String,
   #[serde(rename = "ability1Effects")]
-  ability1_effects: String,
+  pub ability1_effects: String,
   #[serde(rename = "ability2Effects")]
-  ability2_effects: String,
+  pub ability2_effects: String,
   #[serde(rename = "ultimateEffects")]
-  ultimate_effects: String,
+  pub ultimate_effects: String,
 }

@@ -1,4 +1,5 @@
 use ulid::Ulid;
+use crate::objects::role::Role;
 
 pub type ID = [u8; 16];
 
@@ -6,12 +7,12 @@ pub struct Agent {
   id: ID,
   riot_agent_id: String,
   name: String,
-  role: String,
+  role: Role,
   icon: String,
 }
 
 impl Agent {
-  pub fn new_agent(riot_agent_id: String, name: String, role: String, icon: String) -> Agent {
+  pub fn new_agent(riot_agent_id: String, name: String, role: Role, icon: String) -> Agent {
     let ulid = Ulid::new();
     Agent {
       id: ulid.to_bytes(),
@@ -22,7 +23,7 @@ impl Agent {
     }
   }
   
-  pub fn new_agent_with_id(id: ID, riot_agent_id: String, name: String, role: String, icon: String) -> Agent {
+  pub fn new_agent_with_id(id: ID, riot_agent_id: String, name: String, role: Role, icon: String) -> Agent {
     Agent {
       id,
       riot_agent_id,
@@ -40,7 +41,7 @@ impl Agent {
     self.name.clone()
   }
   
-  pub fn role(&self) -> String {
+  pub fn role(&self) -> Role {
     self.role.clone()
   }
   
@@ -60,7 +61,7 @@ impl Agent {
     self.name = name;
   }
   
-  pub fn set_role(&mut self, role: String) {
+  pub fn set_role(&mut self, role: Role) {
     self.role = role;
   }
   

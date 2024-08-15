@@ -3,6 +3,7 @@ use sea_orm::ActiveValue::Set;
 use sea_orm::{ColumnTrait, DbConn, EntityTrait, QueryFilter};
 use domain::objects::agent::{Agent, ID};
 use domain::objects::error::AgentRepositoryError;
+use domain::objects::role::Role;
 use domain::traits::agent::AgentRepository;
 use crate::client::db::entity::agent;
 use crate::dto::agent::AgentResponseDto;
@@ -24,13 +25,13 @@ impl AgentRepositoryImpl {
 impl AgentRepository for AgentRepositoryImpl {
   async fn create(&self, riot_agent_id: String, name: String, role: String, icon: String) -> Result<Agent, AgentRepositoryError> {
     let db = self.db.clone();
-    let agent = Agent::new_agent(riot_agent_id, name, role, icon);
+    let agent = Agent::new_agent(riot_agent_id, name, Role::from_string(&role), icon);
 
     let pear = agent::ActiveModel {
       id: Set(agent.id().to_vec()),
       agent_id: Set(agent.riot_agent_id()),
       name: Set(agent.name()),
-      role: Set(agent.role()),
+      role: Set(agent.role().to_string()),
       icon: Set(agent.icon()),
     };
 
@@ -91,7 +92,7 @@ impl AgentRepository for AgentRepositoryImpl {
           pear.id.try_into().unwrap(),
           pear.agent_id.to_string(),
           pear.name.to_string(),
-          pear.role.to_string(),
+          Role::from_string(&pear.role.to_string()),
           pear.icon.to_string()
         );
         Ok(agent)
@@ -113,7 +114,7 @@ impl AgentRepository for AgentRepositoryImpl {
         let agent = Agent::new_agent(
           agent_dto.agent_id,
           agent_dto.name,
-          agent_dto.role.name,
+          Role::from_string(&agent_dto.role.name),
           agent_dto.icon
         );
 
@@ -121,7 +122,7 @@ impl AgentRepository for AgentRepositoryImpl {
           id: Set(agent.id().to_vec()),
           agent_id: Set(agent.riot_agent_id()),
           name: Set(agent.name()),
-          role: Set(agent.role()),
+          role: Set(agent.role().to_string()),
           icon: Set(agent.icon()),
         };
 
@@ -154,7 +155,7 @@ impl AgentRepository for AgentRepositoryImpl {
       id: Set(agent.id().to_vec()),
       agent_id: Set(agent.riot_agent_id()),
       name: Set(agent.name()),
-      role: Set(agent.role()),
+      role: Set(agent.role().to_string()),
       icon: Set(agent.icon()),
     };
     
@@ -204,7 +205,7 @@ impl AgentRepository for AgentRepositoryImpl {
             p.clone().id.try_into().unwrap(),
             p.clone().agent_id.to_string(),
             p.clone().name.to_string(),
-            p.clone().role.to_string(),
+            Role::from_string(&p.clone().role.to_string()),
             p.clone().icon.to_string()
           )
         }).collect();
@@ -233,7 +234,7 @@ impl AgentRepository for AgentRepositoryImpl {
             p.clone().id.try_into().unwrap(),
             p.clone().agent_id.to_string(),
             p.clone().name.to_string(),
-            p.clone().role.to_string(),
+            Role::from_string(&p.clone().role.to_string()),
             p.clone().icon.to_string()
           )
         }).collect();

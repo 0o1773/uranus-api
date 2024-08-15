@@ -1,12 +1,12 @@
 use chrono::{DateTime};
 use reqwest::Client;
 use reqwest::header::HeaderValue;
-use sea_orm::{ColIdx, ColumnTrait, DbConn, EntityTrait, ModelTrait, QueryFilter};
+use sea_orm::{ColIdx, ColumnTrait, Condition, DbConn, EntityTrait, ModelTrait, QueryFilter, QuerySelect};
 use sea_orm::ActiveValue::Set;
 use domain::objects::error::MatchResultRepositoryError;
 use domain::objects::match_result::{MatchResult, ID};
 use domain::objects::{account, discord_account, riot_account};
-use domain::traits::match_result::MatchResultRepository;
+use domain::traits::match_result::{MatchResultRepository, SearchOption};
 use crate::client::db::entity::{
   account::Entity as AccountEntity,
   riot_account::{
@@ -23,6 +23,7 @@ use crate::client::db::entity::{
   },
   match_result:: {
     Entity as MatchResultEntity,
+    Column as MatchResultColumn,
     ActiveModel as MatchResultModel
   }
 };
@@ -283,8 +284,20 @@ impl MatchResultRepository for MatchResultRepositoryImpl {
     };
 
     match MatchResultEntity::update(active_model).exec(&db).await {
-      Ok(_) => Ok(match_result),
-      Err(_) => Err(MatchResultRepositoryError::UpdateError)
+      Ok(_) => {
+        match db.close().await{
+          Ok(_) => {},
+          Err(_) => return Err(MatchResultRepositoryError::DatabaseError)
+        };
+        Ok(match_result)
+      },
+      Err(_) => {
+        match db.close().await{
+          Ok(_) => {},
+          Err(_) => return Err(MatchResultRepositoryError::DatabaseError)
+        };
+        Err(MatchResultRepositoryError::UpdateError)
+      }
     }
   }
 
@@ -305,9 +318,8 @@ impl MatchResultRepository for MatchResultRepositoryImpl {
     }
   }
 
-  async fn list(&self, account_id: account::ID) -> Result<Vec<MatchResult>, MatchResultRepositoryError> {
+  async fn list(&self, account_id: account::ID, offset: Option<i32>, limit: Option<i32>, option: SearchOption) -> Result<Vec<MatchResult>, MatchResultRepositoryError> {
     let db = self.db.clone();
-
     let account = match AccountEntity::find_by_id(account_id.to_vec())
       .one(&db)
       .await {
@@ -316,7 +328,50 @@ impl MatchResultRepository for MatchResultRepositoryImpl {
         Err(_) => return Err(MatchResultRepositoryError::DatabaseError)
     };
 
-    let match_results = match account.find_related(MatchResultEntity).all(&db).await {
+    let mut l: u64 = 20;
+    if limit.is_some() {
+      l = u64::try_from(limit.unwrap()).unwrap();
+    }
+    
+    let mut o: u64 = 0;
+    if offset.is_some() {
+      o = u64::try_from(offset.unwrap()).unwrap();
+    }
+    
+    let mut entity = account.find_related(MatchResultEntity)
+      .offset(Some(o))
+      .limit(Some(l));
+    
+    if option.map_id.is_some() {
+      entity = entity
+        .filter(MatchResultColumn::MapId.contains(String::from_utf8(option.map_id.unwrap().to_vec()).unwrap()));
+    }
+    
+    if option.agent_id.is_some() {
+      entity = entity
+        .filter(MatchResultColumn::AgentId.contains(String::from_utf8(option.agent_id.unwrap().to_vec()).unwrap()));
+    }
+    
+    if option.role.is_some() {
+      let agents = match AgentEntity::find()
+        .filter(AgentColumn::Role.contains(option.role.unwrap().to_string()))
+        .all(&db)
+        .await {
+        Ok(agents) => agents,
+        Err(_) => return Err(MatchResultRepositoryError::DatabaseError)
+      };
+      
+      let mut conditions = Condition::any();
+      for agent in agents {
+        conditions = conditions.add(MatchResultColumn::AgentId.contains(agent.agent_id));
+      }
+      
+      entity = entity.filter(conditions);
+    };
+
+    let match_results = match entity
+      .all(&db)
+      .await {
       Ok(match_results) => match_results,
       Err(_) => return Err(MatchResultRepositoryError::DatabaseError)
     };
@@ -345,6 +400,11 @@ impl MatchResultRepository for MatchResultRepositoryImpl {
         m.match_start_time.and_utc().timestamp_millis()
       );
       results.push(match_result);
+    };
+    
+    match db.close().await{
+      Ok(_) => {},
+      Err(_) => return Err(MatchResultRepositoryError::DatabaseError)
     };
 
     Ok(results)

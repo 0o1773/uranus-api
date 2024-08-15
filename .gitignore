@@ -1,5 +1,7 @@
 /target
 **/target
 
+**/entity
+
 # IntelliJ IDEA
 .idea

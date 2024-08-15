@@ -5,6 +5,7 @@ use crate::objects::map::ID as MapID;
 
 pub type ID = [u8; 16];
 
+#[derive(Clone)]
 pub struct MatchResult {
   id: ID,
   match_id: String,

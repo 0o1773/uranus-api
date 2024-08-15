@@ -55,5 +55,22 @@ pub enum MapRepositoryError {
 }
 
 pub enum MatchResultRepositoryError {
-  
+  RiotApiKeyNotFound,
+  RiotApiError,
+  DatabaseError,
+  RiotApiParseError,
+  PlayerDataNotFound,
+  AccountNotFound,
+  ParseError,
+  PlayerNotFound,
+  MapNotFound,
+  NotFound,
+  AgentNotFound,
+  FindError,
+  UpdateError,
+  DeleteError,
+}
+
+pub enum MatchListRepositoryError {
+
 }

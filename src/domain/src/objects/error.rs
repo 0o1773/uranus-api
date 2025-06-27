@@ -74,3 +74,7 @@ pub enum MatchResultRepositoryError {
 pub enum MatchListRepositoryError {
 
 }
+
+pub enum AccountApplicationError {
+
+}
